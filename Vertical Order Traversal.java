@@ -33,6 +33,10 @@ Column 1: Only node 3 is in this column.
 Column 2: Only node 7 is in this column.
 
 
+ //Solution:
+ 
+ //Approach 1: Using Level Order Traversal.
+
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -92,4 +96,80 @@ class Solution {
     }
 }
 
+//Time Complexity = O(N * Log(N))
+//Space Complexity = O(N) + O(N)
+
+
+
+//Approach 2: Using inorder traversal.
+
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    class Node {
+        TreeNode node;
+        int row;
+        int col;
+        Node(TreeNode n, int v, int l) {
+            node = n;
+            row = v;
+            col = l;
+        }
+    }
+    
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        Queue<Node> queue = new LinkedList<>();
+        List<List<Integer>> result = new ArrayList<>();
+        queue.add(new Node(root, 0, 0));
+        TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> map = new TreeMap<>();
+        
+        inorder(new Node(root, 0, 0), map);
+        
+        List < List < Integer >> list = new ArrayList < > ();
+        for (TreeMap < Integer, PriorityQueue < Integer >> ys: map.values()) {
+            list.add(new ArrayList < > ());
+            for (PriorityQueue < Integer > nodes: ys.values()) {
+                while (!nodes.isEmpty()) {
+                    list.get(list.size() - 1).add(nodes.poll());
+                }
+            }
+        }
+        return list;
+    }
+    
+    
+    public void inorder(Node root, TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> map) {
+        if(root.node == null) return;
+        if(!map.containsKey(root.row))
+                map.put(root.row, new TreeMap<>());
+        if(!map.get(root.row).containsKey(root.col))
+                map.get(root.row).put(root.col, new PriorityQueue<>());
+        map.get(root.row).get(root.col).add(root.node.val);
+        if(root.node.left != null) {
+            inorder(new Node(root.node.left, root.row - 1, root.col + 1),  map);
+        }
+        if(root.node.right != null) {
+            inorder(new Node(root.node.right, root.row + 1, root.col + 1), map);
+        }
+    }
+}
+
+
+//Time Complexity = O(N * Log(N))
+//Space Complexity = O(N) + O(N)
 
