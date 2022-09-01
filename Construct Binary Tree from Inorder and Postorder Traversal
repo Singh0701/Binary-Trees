@@ -1,0 +1,51 @@
+/************************************************************
+  
+   Following is the TreeNode class structure
+   
+   class TreeNode<T> { 
+        T data; 
+        TreeNode<T> left;
+        TreeNode<T> right;
+  
+        TreeNode(T data) { 
+            this.data = data; 
+            left = null; 
+            right = null; 
+        }
+   }
+    
+ ************************************************************/
+import java.util.*;
+public class Solution {
+	public static TreeNode<Integer> getTreeFromPostorderAndInorder(int[] postOrder, int[] inOrder) {
+        if(inOrder == null || postOrder == null || inOrder.length != postOrder.length) return null;
+		Map<Integer, Integer> inMap = new HashMap<>();
+        int n = inOrder.length;
+        for(int i = 0; i < n; i++) inMap.put(inOrder[i], i);
+        TreeNode<Integer> root = buildTree(postOrder, 0, n-1, inOrder, 0, n-1, inMap);
+        return root;
+	}
+    public static TreeNode<Integer> buildTree(int[] postOrder, int ps, int pe, int[] inOrder, int is, int ie, Map<Integer, Integer> inMap) {
+        if(ps > pe || is > ie) return null;
+        TreeNode<Integer> root = new TreeNode(postOrder[pe]);
+        int inRoot = inMap.get(root.data); //->3
+        int numsLeft = inRoot - is; //->3
+        root.left = buildTree(postOrder, ps, ps + numsLeft - 1, inOrder, is ,inRoot - 1, inMap);
+        root.right = buildTree(postOrder, ps + numsLeft, pe - 1, inOrder, inRoot + 1, ie, inMap);
+        return root;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
