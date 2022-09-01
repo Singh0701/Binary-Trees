@@ -33,3 +33,19 @@ class Solution {
         return root;
     }
 }
+
+//test case
+//pre = [10,20,40,50,30,60]
+//in = [40,20,50,10,60,30]
+//n = 6
+// inMap = [10 -> 3, 20 -> 1, 40 -> 0, 50 -> 2, 30 -> 5, 60 -> 4]
+//root.val = 10
+//inRoot = inMap(10) -> 3 , numsLeft = inRoot - inStart = 3 - 0 = 3
+//buildTree(pre, 0 + 1, 0 + 3, in, 0, 3 - 1, inMap) for left
+//preStart = 1, preEnd = 3, inStart = 0, inEnd = 2
+//buildTree(pre, 0 + 3 + 1, 5, in, 3 + 1, 5, inMap) for right
+//preStart = 4, preEnd = 5, inStart = 4, inEnd = 5
+//...........and so on
+
+
+
