@@ -65,3 +65,63 @@ class Solution {
 
 //Time complexity = O(N * Log(N))
 //Space complexity = O(1) Ignoring the Stack space for recursion, although it would be O(H) in worst case (assuming BST is balanced and has Log(N) height.
+
+
+//Approach 3: Optimal Approach, Using the binary serach tree iterator.
+
+
+class Solution {
+    public boolean findTarget(TreeNode root, int k) {
+        BSTIterator l = new BSTIterator(root, false);
+        BSTIterator r = new BSTIterator(root, true);
+        
+        int i = l.next();
+        int j = r.next();
+        
+        while(i < j) {
+            if(i + j == k) return true;
+            if(i + j < k) {
+                i = l.next();
+            } else j = r.next();
+        }
+        return false;
+    }
+    
+    
+    class BSTIterator {
+    
+        Stack<TreeNode> inorder;  
+        boolean reverse = true;
+        //Utility function to insert all the nodes in from given root and the left most node.
+        public void insertIntoStack(TreeNode root) {
+            while(root != null) {
+                inorder.push(root);
+                if(reverse) root = root.right;
+                else root = root.left;
+            }
+        }
+
+        //Insert root to left at first.
+        public BSTIterator(TreeNode root, boolean isReverse) {
+            inorder = new Stack<>();
+            reverse = isReverse;
+            insertIntoStack(root);
+        }
+
+        //Pop out the top node and call insertIntoStack function for it's right Sub Tree.
+        public int next() {
+            TreeNode next = inorder.pop();
+            if(reverse) insertIntoStack(next.left);
+            else insertIntoStack(next.right);
+            return next.val;
+        }
+
+        //If stack is empty return false else return true.
+        public boolean hasNext() {
+            return !inorder.isEmpty();
+        }
+    }
+}
+
+//Time complexity = O(N)
+//Space complexity = O(h)
