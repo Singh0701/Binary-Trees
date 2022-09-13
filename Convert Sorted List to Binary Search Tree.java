@@ -1,7 +1,7 @@
 //Problem: Given the head of a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST. For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
 
 
-//Approach: Divide and Conquer, First we convert the given linked list into a arraylist or array for easier operations and then we call a build tree function. what it does is pick the middle element of the sorted list (The balance point for all  subTree's and root itself) after picking the middle element we divide the sorted list into two halfs and then again do the same operation.
+//Approach 1: Divide and Conquer, First we convert the given linked list into a arraylist or array for easier operations and then we call a build tree function. what it does is pick the middle element of the sorted list (The balance point for all  subTree's and root itself) after picking the middle element we divide the sorted list into two halfs and then again do the same operation.
 
 class Solution {
     public TreeNode sortedListToBST(ListNode head) {
@@ -29,3 +29,35 @@ class Solution {
 
 //Time complexity = O(N) + (Log(N))
 //Space complexity = O(N)
+
+
+//Approach 2: Using inorder traversal.
+
+class Solution {
+    ListNode node;
+    public TreeNode sortedListToBST(ListNode head) {
+        if(head == null) return null;
+        int size = 0;
+        node = head;
+        while(head != null) {
+            head = head.next;
+            size++;
+        }
+        return buildTree(0, size - 1);
+    }
+    
+    public TreeNode buildTree(int low, int high) {
+        if(low > high) return null;
+        
+        int mid = low + (high - low) / 2;
+        TreeNode left = buildTree(low, mid - 1);
+        TreeNode root = new TreeNode(node.val);
+        root.left = left;
+        node = node.next;
+        root.right = buildTree(mid + 1, high);
+        return root;
+    }
+}
+
+//Time complexity = O(N)
+//Space complexity = O(H)
